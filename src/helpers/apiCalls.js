@@ -1,6 +1,3 @@
-const baseUrl = process.env.BASE_URL | ''
-const rapidapi_key = process.env.RAPIDAPI_KEY | ''
-const rapidapi_host = process.env.RAPIDAPI_HOST | ''
 // https://zillow-com1.p.rapidapi.com
 export const getTrendingHouses = async (long, lat, d, includeSold) => {
   const url = `https://zillow-com1.p.rapidapi.com/propertyByCoordinates?long=${long}&lat=${lat}&d=${d}&includeSold=${includeSold}`;
@@ -15,7 +12,8 @@ export const getTrendingHouses = async (long, lat, d, includeSold) => {
   try {
     const response = await fetch(url, options);
     const result = await response.json();
-    console.log(result);
+    // console.log(result);
+    return result;
   } catch (error) {
     console.error(error);
   }
