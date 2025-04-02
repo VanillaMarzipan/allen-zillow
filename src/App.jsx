@@ -3,6 +3,7 @@ import Search from './components/Search'
 import { getHouses } from './helpers/apiCalls'
 import HouseCard from './components/HouseCard'
 
+// TEST 123
 const App = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState('Santa Monica, CA');
