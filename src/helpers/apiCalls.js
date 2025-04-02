@@ -1,6 +1,6 @@
 // https://zillow-com1.p.rapidapi.com
-export const getTrendingHouses = async (long, lat, d, includeSold) => {
-  const url = `https://zillow-com1.p.rapidapi.com/propertyByCoordinates?long=${long}&lat=${lat}&d=${d}&includeSold=${includeSold}`;
+export const getHouses = async (location, currentPage) => {
+  const url = `https://zillow-com1.p.rapidapi.com/propertyExtendedSearch?location=${location}&page=${currentPage}&status_type=ForSale&home_type=Houses`;
   const options = {
     method: 'GET',
     headers: {
@@ -11,8 +11,12 @@ export const getTrendingHouses = async (long, lat, d, includeSold) => {
   
   try {
     const response = await fetch(url, options);
+
+    if (!response.ok) {
+      throw new Error("Oof! You got an error!");
+    }
     const result = await response.json();
-    // console.log(result);
+    console.log(result);
     return result;
   } catch (error) {
     console.error(error);

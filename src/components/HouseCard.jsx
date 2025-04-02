@@ -1,13 +1,21 @@
 import React from 'react'
-import { formatNumber, formatString } from '../helpers/helpers'
+import { formatNumber } from '../helpers/helpers'
 
-const HouseCard = ({index, zpid, streetAddress, city, state, zipcode, imgSrc, bedrooms, bathrooms, status, price}) => {
+const HouseCard = ({zpid, index, address, country, bathrooms, bedrooms, livingArea, lotAreaUnit, imgSrc, price, zestimate, currency}) => {
 
     return (
-        <li key={zpid}>
-            <h2>{index}: {streetAddress}, {city}, {state} {zipcode}</h2>
-            <h4>{bedrooms} Bedrooms, {bathrooms} Bathrooms. {formatString(status)} at {formatNumber(price)}</h4>
-            <img src={imgSrc} alt={zpid}/>
+        <li key={index}>
+            <>
+                <h3>{index+1}: {address}, {country}</h3>
+                <div>{bathrooms} Bathrooms, {bedrooms} Bedrooms, {livingArea} {lotAreaUnit}</div>
+                <div>{formatNumber(price)}{zestimate ? (' ~ ') + formatNumber(zestimate) : ''} {currency}<br/><br/></div>
+                <div></div>
+
+                <img 
+                    src={imgSrc} 
+                    alt={zpid}
+                />
+            </>
         </li>
     )
 }

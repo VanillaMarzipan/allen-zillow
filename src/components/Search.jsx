@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Search = ({searchTerm, setSearchTerm}) => {
+const Search = ({searchTerm, setSearchTerm, loadHouses}) => {
     return (
         <div className="search">
             <div>
@@ -10,8 +10,13 @@ const Search = ({searchTerm, setSearchTerm}) => {
                     placeholder="Find your dream house!"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
+                    onKeyUp={(e) => {
+                        if (e.key === "Enter") {
+                            loadHouses(searchTerm);
+                        }
+                    }}
                 />
-                <button>Submit</button>
+                <button onClick={() => {loadHouses(searchTerm)}}>Submit</button>
             </div>
         </div>
     )

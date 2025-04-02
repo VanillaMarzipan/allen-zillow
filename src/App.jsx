@@ -1,29 +1,33 @@
 import React, { useEffect, useState } from 'react'
 import Search from './components/Search'
-import { getTrendingHouses } from './helpers/apiCalls'
+import { getHouses } from './helpers/apiCalls'
 import HouseCard from './components/HouseCard'
-import { limitNumbers } from './helpers/helpers'
 
 const App = () => {
-    const [isLoading, setIsLoading] = useState(false)
-    const [searchTerm, setSearchTerm] = useState('')
-    const [trendingHouses, setTrendingHouses] = useState([])
+    const [isLoading, setIsLoading] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('Santa Monica, CA');
+    const [count, setCount] = useState(0);
+    const [currentPage, setCurrentPage] = useState(2);
+    const [houses, setHouses] = useState([]);
 
-    // Load trending houses
+    const resultsPerPage = 41;
+
     useEffect(() => {
-        loadTrendingHouses(-118.504744, 34.01822, 0.5, true);
+        setCurrentPage(1);
     }, [])
 
-    const loadTrendingHouses = async (long, lat, d, includeSold) => {
-        d = limitNumbers(d);
+    useEffect(() => {
+        loadHouses(searchTerm, currentPage);
+    }, [currentPage])
+
+    const loadHouses = async (searchTerm, currentPage) => {
         try {
             setIsLoading(true);
-            const houses = await getTrendingHouses(long, lat, d, includeSold)
-            setTrendingHouses(houses);
-            console.log("********************");
-            console.log(houses);
+            const result = await getHouses(searchTerm, currentPage);
+            setCount(result.totalResultCount);
+            setHouses(result.props);
         } catch (error) {
-            console.error(`Error fetching trending houses: ${error}`);
+            console.error(`Error fetching houses: ${error}`);
         } finally {
             setIsLoading(false)
         }
@@ -34,29 +38,40 @@ const App = () => {
             <div className='wrapper'>
                 <header>
                     <h1>Allen's Zillow!</h1>
-                    <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
+                    <Search 
+                        searchTerm={searchTerm} 
+                        setSearchTerm={setSearchTerm} 
+                        loadHouses={loadHouses}
+                    />
                 </header>
 
                 <div>
                     {isLoading ? <div>
                         Loading...
                     </div> : 
-                    trendingHouses.length > 0 ? <div>
-                        <h1>{trendingHouses.length} houses found!</h1>
+                    count > 0 ? <div>
+                        <div>
+                            {Array.from({length: count/resultsPerPage+1}, (_, index) => (
+                                <button>{index + 1}</button>
+                            ))}
+                        </div>                        
+                        <h1>{count} houses found!</h1>
+                        <h4>Displaying houses {1+(currentPage-1)*resultsPerPage}~{Math.min(currentPage*resultsPerPage, count)}</h4>
                         <ul>
-                            {trendingHouses.map((house, index) => (
+                            {houses.map((house, index) => (
                                 <HouseCard
-                                    index={index + 1}
-                                    zpid={house.property.zpid}
-                                    streetAddress={house.property.address.streetAddress}
-                                    city={house.property.address.city}
-                                    state={house.property.address.state}
-                                    zipcode={house.property.address.zipcode}
-                                    imgSrc={house.property.imgSrc}
-                                    bedrooms={house.property.bedrooms}
-                                    bathrooms={house.property.bathrooms}
-                                    status={house.property.homeStatus}
-                                    price={house.property.price}
+                                    id={house.zpid}
+                                    index={index + (currentPage-1)*resultsPerPage}
+                                    address={house.address}
+                                    country={house.country}
+                                    bathrooms={house.bathrooms}
+                                    bedrooms={house.bedrooms}
+                                    livingArea={house.livingArea}
+                                    lotAreaUnit={house.lotAreaUnit}
+                                    imgSrc={house.imgSrc}
+                                    price={house.price}
+                                    zestimate={house.zestimate}
+                                    currency={house.currency}
                                 />
                             ))}
                         </ul>
