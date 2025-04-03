@@ -1,10 +1,8 @@
-# Getting Started with Create React App
+# Portfolio Project 1 -- Allen's Zillow Clone
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
 
-## Available Scripts
-
-In the project directory, you can run:
+Tries to re-create as many features on Zillow as possible. A showcase of some of Allen's skills on React.
 
 ### `npm start`
 

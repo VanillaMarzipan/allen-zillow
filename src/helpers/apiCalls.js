@@ -1,11 +1,13 @@
+import { apiConfig } from "../config/config";
+
 // https://zillow-com1.p.rapidapi.com
-export const getHouses = async (location, currentPage) => {
-  const url = `https://zillow-com1.p.rapidapi.com/propertyExtendedSearch?location=${location}&page=${currentPage}&status_type=ForSale&home_type=Houses`;
+export const getHouses = async (location, currentPage, statusType, homeType) => {
+  const url = `${apiConfig.baseUrl}/propertyExtendedSearch?location=${location}&page=${currentPage}&status_type=${statusType}&home_type=${homeType}`;
   const options = {
     method: 'GET',
     headers: {
-      'x-rapidapi-key': 'a2acfeeb0fmsh024db1e577002c5p146dbdjsn1fe7b1a8d9ab',
-      'x-rapidapi-host': 'zillow-com1.p.rapidapi.com'
+      'x-rapidapi-key': apiConfig.x_rapidapi_key,
+      'x-rapidapi-host': apiConfig.x_rapidapi_host,
     }
   };
   
