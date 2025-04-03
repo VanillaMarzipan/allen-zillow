@@ -2,19 +2,19 @@ import React, { useEffect, useState } from 'react'
 import Search from './components/Search'
 import { getHouses } from './helpers/apiCalls'
 import HouseCard from './components/HouseCard'
+import PageButtons from './components/PageButtons'
 
 const App = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState('Santa Monica, CA');
-    const [count, setCount] = useState(0);
-    const [currentPage, setCurrentPage] = useState(2);
+    const [totalResultCount, setTotalResultCount] = useState(-1); // TODO: Temporary 'Too bad bro!'
+    const [totalPages, setTotalPages] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
     const [houses, setHouses] = useState([]);
 
+    // Hardcoded API vars!
     const resultsPerPage = 41;
-
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [])
+    const maxPages = 20;
 
     useEffect(() => {
         loadHouses(searchTerm, currentPage);
@@ -24,7 +24,8 @@ const App = () => {
         try {
             setIsLoading(true);
             const result = await getHouses(searchTerm, currentPage);
-            setCount(result.totalResultCount);
+            setTotalResultCount(result.totalResultCount);
+            setTotalPages(result.totalPages);
             setHouses(result.props);
         } catch (error) {
             console.error(`Error fetching houses: ${error}`);
@@ -41,22 +42,32 @@ const App = () => {
                     <Search 
                         searchTerm={searchTerm} 
                         setSearchTerm={setSearchTerm} 
+                        currentPage={currentPage}
                         loadHouses={loadHouses}
                     />
                 </header>
 
                 <div>
-                    {isLoading ? <div>
+                    {isLoading ? 
+                    <div>
                         Loading...
                     </div> : 
-                    count > 0 ? <div>
-                        <div>
-                            {Array.from({length: count/resultsPerPage+1}, (_, index) => (
-                                <button>{index + 1}</button>
-                            ))}
-                        </div>                        
-                        <h1>{count} houses found!</h1>
-                        <h4>Displaying houses {1+(currentPage-1)*resultsPerPage}~{Math.min(currentPage*resultsPerPage, count)}</h4>
+                    totalResultCount > 0 ? 
+                    <div>
+                        <>{totalResultCount} {totalPages} {currentPage}</>
+                        <PageButtons
+                            totalPages={totalPages}
+                            currentPage={currentPage}
+                            setCurrentPage={setCurrentPage}
+                        />
+                        {totalResultCount > resultsPerPage * maxPages ? 
+                            <h1>Too many houses! Showing only the first {resultsPerPage * maxPages} results!</h1> : 
+                            <h1>{totalResultCount} houses found!</h1>
+                        }                    
+                        <h4>
+                            Displaying houses {1+(currentPage-1)*resultsPerPage}~
+                            {Math.min(currentPage*resultsPerPage, Math.min(resultsPerPage * maxPages, totalResultCount))}
+                        </h4>
                         <ul>
                             {houses.map((house, index) => (
                                 <HouseCard
@@ -75,7 +86,13 @@ const App = () => {
                                 />
                             ))}
                         </ul>
-                    </div> : <div>
+                        <PageButtons
+                            totalPages={totalPages}
+                            currentPage={currentPage}
+                            setCurrentPage={setCurrentPage}
+                        />
+                    </div> : 
+                    <div>
                         Too bad bro, we don't see any houses here!
                     </div>
                     }
