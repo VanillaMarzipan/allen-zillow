@@ -7,9 +7,13 @@ import { appStrings } from './config/config'
 import Filter from './components/Filter'
 import Header from './components/Header'
 import Footer from './components/Footer'
+import { useDispatch, useSelector } from 'react-redux'
+import { setIsLoading, setScreenType } from './actions/uiActions'
 
 const App = () => {
-    const [isLoading, setIsLoading] = useState(false);
+    const dispatch = useDispatch();
+    const { isLoading, isFilterOpen, screenType } = useSelector(state => state.uiData);
+
     const [searchTerm, setSearchTerm] = useState(appStrings.defaultSearchTerm);
     const [totalResultCount, setTotalResultCount] = useState(-1); // TODO: Temporary 'Too bad bro!'
     const [totalPages, setTotalPages] = useState(0);
@@ -20,7 +24,6 @@ const App = () => {
     Rule of Thumb:
     Start with useState for managing local component state. If you find yourself passing props down through many levels or if multiple unrelated components need to access and modify the same data, then consider introducing Redux (or another global state management solution).
     */
-    const [isFilterOpen, setIsFilterOpen] = useState(false);
     const [statusType, setStatusType] = useState('ForSale'); // ForSale, ForRent, RecentlySold
     const [homeType, setHomeType] = useState('Houses'); // Townhomes, Houses, Apartments_Condos_Co-ops, etc.
     // const [sort, setSort] = useState('Homes_for_You');
@@ -38,12 +41,13 @@ const App = () => {
     const maxPages = 20;
 
     useEffect(() => {
-        loadHouses(searchTerm, currentPage, statusType, homeType);
+        dispatch(setScreenType('MainScreen'));
+        loadHouses(searchTerm, currentPage, statusType, homeType, minPrice, maxPrice, rentMinPrice, rentMaxPrice, bedsMin, bedsMax, bathsMin, bathsMax);
     }, [currentPage])
 
     const loadHouses = async (searchTerm, currentPage, statusType, homeType, minPrice, maxPrice, rentMinPrice, rentMaxPrice, bedsMin, bedsMax, bathsMin, bathsMax) => {
         try {
-            setIsLoading(true);
+            dispatch(setIsLoading(true));
             const result = await getHouses(searchTerm, currentPage, statusType, homeType, minPrice, maxPrice, rentMinPrice, rentMaxPrice, bedsMin, bedsMax, bathsMin, bathsMax);
             setTotalResultCount(result.totalResultCount);
             setTotalPages(result.totalPages);
@@ -51,7 +55,7 @@ const App = () => {
         } catch (error) {
             console.error(`Error fetching houses: ${error}`);
         } finally {
-            setIsLoading(false)
+            dispatch(setIsLoading(false));
         }
     }
 
@@ -63,7 +67,8 @@ const App = () => {
 
     const resultScreen = (
         <div>
-            <>{totalResultCount} {totalPages} {currentPage}</>
+            <div>{totalResultCount} {totalPages} {currentPage}</div>
+            <div>{isLoading} {isFilterOpen} {screenType}</div>
             <PageButtons
                 totalPages={totalPages}
                 currentPage={currentPage}
@@ -129,8 +134,6 @@ const App = () => {
                 bathsMax={bathsMax}
             />
             <Filter
-                isFilterOpen={isFilterOpen}
-                setIsFilterOpen={setIsFilterOpen}
                 statusType={statusType}
                 setStatusType={setStatusType}
                 homeType={homeType}

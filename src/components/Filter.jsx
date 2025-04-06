@@ -2,9 +2,10 @@ import React from 'react'
 import { filterDescriptions, homeTypes, statusTypes } from '../config/config'
 import Options from './Options'
 import InputBox from './InputBox'
+import { useDispatch, useSelector } from 'react-redux'
+import { setFilterOpen } from '../actions/uiActions'
 
 const Filter = ({
-        isFilterOpen, setIsFilterOpen, 
         statusType, setStatusType,
         homeType, setHomeType,
         minPrice, setMinPrice,
@@ -17,10 +18,13 @@ const Filter = ({
         bathsMax, setBathsMax,
     }) => {
     
+    const dispatch = useDispatch();
+    const isFilterOpen = useSelector(state => state.uiData);
+    
     return (
         <div>
             <button
-                onClick={() => setIsFilterOpen(!isFilterOpen)} // TODO: This can be moved to redux?
+                onClick={() => dispatch(setFilterOpen(!isFilterOpen))}
             >
                 More options
             </button>

@@ -6,7 +6,7 @@ export const getHouses = async (location, currentPage, statusType, homeType, min
   
   if (statusType == 'ForSale' || statusType == 'RecentlySold') {
     if (maxPrice > 0) {
-      // TODO: swap if necessary, helper does not work!
+      // TODO: swap if necessary, reversed does not work!
       url += `&minPrice=${minPrice}&maxPrice=${maxPrice}`;
     }
   } else {
