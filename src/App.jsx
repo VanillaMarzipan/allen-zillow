@@ -3,7 +3,7 @@ import Search from './components/Search'
 import { getHouses } from './helpers/apiCalls'
 import HouseCard from './components/HouseCard'
 import PageButtons from './components/PageButtons'
-import { appStrings, statusTypes } from './config/config'
+import { appStrings } from './config/config'
 import Filter from './components/Filter'
 import Header from './components/Header'
 import Footer from './components/Footer'
@@ -15,17 +15,6 @@ const App = () => {
     const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [houses, setHouses] = useState([]);
-
-    // WISHLIST
-    /*
-        Caching
-        Lazy loading
-        Auth and accounts
-    */
-
-    // Filters O'Plenty
-    // TODO: Create the filter component
-    // TODO: Maybe move all of them to redux?
 
     /*
     Rule of Thumb:
@@ -41,8 +30,8 @@ const App = () => {
     const [rentMaxPrice, setRentMaxPrice] = useState(0);
     const [bedsMin, setBedsMin] = useState(0);
     const [bedsMax, setBedsMax] = useState(0);
-    const [bathroomsMin, setBathroomsMin] = useState(0);
-    const [bathroomsMax, setBathroomsMax] = useState(0);
+    const [bathsMin, setBathsMin] = useState(0);
+    const [bathsMax, setBathsMax] = useState(0);
 
     // Hardcoded API vars!
     const resultsPerPage = 41;
@@ -52,10 +41,10 @@ const App = () => {
         loadHouses(searchTerm, currentPage, statusType, homeType);
     }, [currentPage])
 
-    const loadHouses = async (searchTerm, currentPage, statusType, homeType) => {
+    const loadHouses = async (searchTerm, currentPage, statusType, homeType, minPrice, maxPrice, rentMinPrice, rentMaxPrice, bedsMin, bedsMax, bathsMin, bathsMax) => {
         try {
             setIsLoading(true);
-            const result = await getHouses(searchTerm, currentPage, statusType, homeType);
+            const result = await getHouses(searchTerm, currentPage, statusType, homeType, minPrice, maxPrice, rentMinPrice, rentMaxPrice, bedsMin, bedsMax, bathsMin, bathsMax);
             setTotalResultCount(result.totalResultCount);
             setTotalPages(result.totalPages);
             setHouses(result.props);
@@ -130,9 +119,16 @@ const App = () => {
                 currentPage={currentPage}
                 statusType={statusType}
                 homeType={homeType}
+                minPrice={minPrice}
+                maxPrice={maxPrice}
+                rentMinPrice={rentMinPrice}
+                rentMaxPrice={rentMaxPrice}
+                bedsMin={bedsMin}
+                bedsMax={bedsMax}
+                bathsMin={bathsMin}
+                bathsMax={bathsMax}
             />
             <Filter
-                // TODO: You really wanna move this to redux...
                 isFilterOpen={isFilterOpen}
                 setIsFilterOpen={setIsFilterOpen}
                 statusType={statusType}
@@ -151,10 +147,10 @@ const App = () => {
                 bedsMax={bedsMax}
                 setBedsMin={setBedsMin}
                 setBedsMax={setBedsMax}
-                bathroomsMin={bathroomsMin}
-                bathroomsMax={bathroomsMax}
-                setBathroomsMin={setBathroomsMin}
-                setBathroomsMax={setBathroomsMax}          
+                bathsMin={bathsMin}
+                bathsMax={bathsMax}
+                setBathsMin={setBathsMin}
+                setBathsMax={setBathsMax}          
             />
             <div>
                 {isLoading ? loadingScreen : 

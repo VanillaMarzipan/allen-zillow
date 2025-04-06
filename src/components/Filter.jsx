@@ -1,9 +1,7 @@
 import React from 'react'
 import { filterDescriptions, homeTypes, statusTypes } from '../config/config'
 import Options from './Options'
-
-
-
+import InputBox from './InputBox'
 
 const Filter = ({
         isFilterOpen, setIsFilterOpen, 
@@ -15,14 +13,14 @@ const Filter = ({
         rentMaxPrice, setRentMaxPrice,
         bedsMin, setBedsMin,
         bedsMax, setBedsMax,
-        bathroomsMin, setBathroomsMin,
-        bathroomsMax, setBathroomsMax,
+        bathsMin, setBathsMin,
+        bathsMax, setBathsMax,
     }) => {
     
     return (
         <div>
             <button
-                onClick={() => setIsFilterOpen(!isFilterOpen)}
+                onClick={() => setIsFilterOpen(!isFilterOpen)} // TODO: This can be moved to redux?
             >
                 More options
             </button>
@@ -44,37 +42,60 @@ const Filter = ({
                 {
                     (statusType === 'ForSale' || statusType === 'RecentlySold') ?
                     <div>
-                        <label>{filterDescriptions.minPrice}</label>
-                        <input
-                            type='number'
-                            value={minPrice}
-                            onChange={(e) => setMinPrice(e.target.value)}
+                        <InputBox
+                            desc={filterDescriptions.minPrice}
+                            variable={minPrice}
+                            setVariable={setMinPrice}
                         />
-                        <label>{filterDescriptions.maxPrice}</label>
-                        <input
-                            type='number'
-                            placeholder={minPrice}
-                            value={maxPrice}
-                            onChange={(e) => setMaxPrice(e.target.value)}
+                        <InputBox
+                            desc={filterDescriptions.maxPrice}
+                            variable={maxPrice}
+                            setVariable={setMaxPrice}
                         />
                     </div> : 
                     <div>
-                        <label>{filterDescriptions.rentMinPrice}</label>
-                        <input
+                        <InputBox
+                            desc={filterDescriptions.rentMinPrice}
                             type='number'
-                            value={rentMinPrice}
-                            onChange={(e) => setRentMinPrice(e.target.value)}
+                            variable={rentMinPrice}
+                            setVariable={setRentMinPrice}
                         />
-                        <label>{filterDescriptions.rentMaxPrice}</label>
-                        <input
+                        <InputBox
+                            desc={filterDescriptions.rentMaxPrice}
                             type='number'
-                            placeholder={rentMinPrice}
-                            value={rentMaxPrice}
-                            onChange={(e) => setRentMaxPrice(e.target.value)}
+                            variable={rentMaxPrice}
+                            setVariable={setRentMaxPrice}
                         />
                     </div>
                 }
-                
+                <div>
+                    <InputBox
+                        desc={filterDescriptions.bedsMin}
+                        type='number'
+                        variable={bedsMin}
+                        setVariable={setBedsMin}
+                    />
+                    <InputBox
+                        desc={filterDescriptions.bedsMax}
+                        type='number'
+                        variable={bedsMax}
+                        setVariable={setBedsMax}
+                    />
+                </div>
+                <div>
+                    <InputBox
+                        desc={filterDescriptions.bathsMin}
+                        type='number'
+                        variable={bathsMin}
+                        setVariable={setBathsMin}
+                    />
+                    <InputBox
+                        desc={filterDescriptions.bathsMax}
+                        type='number'
+                        variable={bathsMax}
+                        setVariable={setBathsMax}
+                    />
+                </div>
             </div>
             }
         </div>

@@ -1,8 +1,27 @@
 import { apiConfig } from "../config/config";
 
 // https://zillow-com1.p.rapidapi.com
-export const getHouses = async (location, currentPage, statusType, homeType) => {
-  const url = `${apiConfig.baseUrl}/propertyExtendedSearch?location=${location}&page=${currentPage}&status_type=${statusType}&home_type=${homeType}`;
+export const getHouses = async (location, currentPage, statusType, homeType, minPrice, maxPrice, rentMinPrice, rentMaxPrice, bedsMin, bedsMax, bathsMin, bathsMax) => {
+  let url = `${apiConfig.baseUrl}/propertyExtendedSearch?location=${location}&page=${currentPage}&status_type=${statusType}&home_type=${homeType}`;
+  
+  if (statusType == 'ForSale' || statusType == 'RecentlySold') {
+    if (maxPrice > 0) {
+      // TODO: swap if necessary, helper does not work!
+      url += `&minPrice=${minPrice}&maxPrice=${maxPrice}`;
+    }
+  } else {
+    if (rentMaxPrice > 0) {
+      url += `&rentMinPrice=${rentMinPrice}&rentMaxPrice=${rentMaxPrice}`;
+    }
+  }
+
+  if (bedsMax > 0) {
+    url += `&bedsMin=${bedsMin}&bedsMax=${bedsMax}`;
+  }
+  if (bathsMax > 0) {
+    url += `&bathsMin=${bathsMin}&bathsMax=${bathsMax}`;
+  }
+
   const options = {
     method: 'GET',
     headers: {

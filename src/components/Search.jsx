@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Search = ({loadHouses, searchTerm, setSearchTerm, currentPage, statusType, homeType}) => {
+const Search = ({loadHouses, searchTerm, setSearchTerm, currentPage, statusType, homeType, minPrice, maxPrice, rentMinPrice, rentMaxPrice, bedsMin, bedsMax, bathsMin, bathsMax}) => {
     return (
         <div className="search">
             <div>
@@ -13,12 +13,12 @@ const Search = ({loadHouses, searchTerm, setSearchTerm, currentPage, statusType,
                     onKeyUp={(e) => {
                         if (e.key === "Enter") {
                             console.log(searchTerm);
-                            loadHouses(searchTerm, currentPage, statusType, homeType);
+                            loadHouses(searchTerm, currentPage, statusType, homeType, minPrice, maxPrice, rentMinPrice, rentMaxPrice, bedsMin, bedsMax, bathsMin, bathsMax);
                         }
                     }}
                 />
                 <button 
-                    onClick={() => {loadHouses(searchTerm, currentPage, statusType, homeType)}}
+                    onClick={() => {loadHouses(searchTerm, currentPage, statusType, homeType, minPrice, maxPrice, rentMinPrice, rentMaxPrice, bedsMin, bedsMax, bathsMin, bathsMax)}}
                 >
                     Submit
                 </button>

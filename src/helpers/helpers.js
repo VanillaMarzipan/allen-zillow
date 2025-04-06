@@ -7,6 +7,15 @@ export const limitNumbers = (num, low=0.01, high=0.5) => {
     return num;
 }
 
+export const minMaxSwap = (min, setMin, max, setMax) => {
+  let temp;
+  if (min > max) {
+      temp = min;
+      setMin(max);
+      setMax(temp);
+  }
+}
+
 export const formatString = (str) => {
     const words = str.split("_");
   

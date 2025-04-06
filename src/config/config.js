@@ -17,6 +17,10 @@ export const filterDescriptions = {
     maxPrice: 'Maximum Price (USD $): ',
     rentMinPrice: 'Minimum Rent (USD $): ',
     rentMaxPrice: 'Maximum Rent (USD $): ',
+    bedsMin: 'Minimum number of bedrooms: ',
+    bedsMax: 'Maximum number of bedrooms: ',
+    bathsMin: 'Minimum number of bathrooms: ',
+    bathsMax: 'Maximum number of bathrooms: ',
 }
 
 export const statusTypes = [
