@@ -13,6 +13,10 @@ export const appStrings = {
 export const filterDescriptions = {
     statusTypes: 'Status Types: ',
     homeTypes: 'Home Types: ',
+    minPrice: 'Minimum Price (USD $): ',
+    maxPrice: 'Maximum Price (USD $): ',
+    rentMinPrice: 'Minimum Rent (USD $): ',
+    rentMaxPrice: 'Maximum Rent (USD $): ',
 }
 
 export const statusTypes = [
